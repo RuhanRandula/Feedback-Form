@@ -8,6 +8,9 @@ const FeedbackForm = () => {
     feedback: '',
     rating: '',
   });
+  const [showModal, setShowModal] = useState(false);
+  const [confirmationMessage, setConfirmationMessage] = useState('');
+  const [thankYouMessage, setThankYouMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,19 +23,25 @@ const FeedbackForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const confirmationMessage = `Name: ${formData.name}\nEmail: ${formData.email}\nFeedback: ${formData.feedback}\nRating: ${formData.rating}`;
-    const isConfirmed = window.confirm(`Please confirm your details:\n\n${confirmationMessage}`);
+    const message = `Name: ${formData.name}\nEmail: ${formData.email}\nFeedback: ${formData.feedback}\nRating: ${formData.rating}`;
+    setConfirmationMessage(message);
+    setShowModal(true);
+  };
 
-    if (isConfirmed) {
-      console.log(formData);
-      alert('Thank you for your feedback!');
-      setFormData({
-        name: '',
-        email: '',
-        feedback: '',
-        rating: '',
-      });
-    }
+  const handleConfirm = () => {
+    console.log(formData);
+    setShowModal(false);
+    setThankYouMessage('Thank you for your feedback!');
+    setFormData({
+      name: '',
+      email: '',
+      feedback: '',
+      rating: '',
+    });
+  };
+
+  const handleCancel = () => {
+    setShowModal(false);
   };
 
   return (
@@ -65,9 +74,9 @@ const FeedbackForm = () => {
         />
         <div className="rating">
           <p>Rate Us:</p>
-          <div className="rating-container"> {/* Added a new container div */}
+          <div className="rating-container">
             {[1, 2, 3, 4, 5].map((value) => (
-              <label key={value} className="rating-label">
+              <label key={value} className={`rating-label ${formData.rating === value.toString() ? 'selected' : ''}`}>
                 <input
                   type="radio"
                   name="rating"
@@ -82,6 +91,23 @@ const FeedbackForm = () => {
         </div>
         <button type="submit">Submit Feedback</button>
       </form>
+
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Confirm Your Details</h2>
+            <p>{confirmationMessage}</p>
+            <button onClick={handleConfirm}>Confirm</button>
+            <button onClick={handleCancel}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {thankYouMessage && (
+        <div className="thank-you-message">
+          <p>{thankYouMessage}</p>
+        </div>
+      )}
     </>
   );
 };
