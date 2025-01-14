@@ -62,4 +62,12 @@ nav{
       width: 90%;
     }
   }
-  
+
+.rating-label {
+  margin-right: 10px; /* Add margin to space out the radio buttons */
+}
+
+.rating-container {
+  display: flex; /* Makes the buttons display inline */
+  justify-content: space-around; /* Distributes buttons evenly */
+}
